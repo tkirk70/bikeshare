@@ -69,14 +69,14 @@ def time_stats(df):
     # TO DO: display the most common month
     mode_month = df['month'].mode()[0]
     mode_month = calendar.month_name[mode_month]
-    print(mode_month)
+    print("The busiest month is: ", mode_month)
     # TO DO: display the most common day of week
     mode_day = df['day'].mode()[0]
     mode_day = calendar.day_name[mode_day]
-    print(mode_day)
+    print("The busiest riding day is:", mode_day)
     # TO DO: display the most common start hour
     mode_hour = df['hour'].mode()[0]
-    print(mode_hour)
+    print("The busiest hour is: ", mode_hour)
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -113,12 +113,12 @@ def trip_duration_stats(df):
 
     # TO DO: display total travel time
     total_time = df['Trip Duration'].sum()
-    print(total_time)
+    print("Total travel time is ", total_time, "seconds.")
     # TO DO: display mean travel time
     average_time = df['Trip Duration'].mean()
-    print(average_time)
+    print("The average trip lasts: ", average_time, "seconds.")
     max_time = df['Trip Duration'].max()
-    print(max_time)
+    print("The longest trip took: ", max_time, "seconds.")
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
