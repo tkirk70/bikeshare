@@ -22,15 +22,15 @@ def get_filters():
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     city = ''
     while city not in CITY_DATA:
-        city = input("What city would you like to explore? ")
+        city = input("What city would you like to explore? ").lower()
     else:
         print("One moment, please. ")
 
     # TO DO: get user input for month (all, january, february, ... , june)
-    month = input("What month would you like to look at? ")
+    month = input("What month would you like to look at? ").lower()
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-    day = input("What day are you interested in? ")
+    day = input("What day are you interested in? ").lower()
 
     print('-'*40)
     return city, month, day
@@ -50,6 +50,18 @@ def load_data(city, month, day):
 
     df = pd.read_csv(CITY_DATA[city])
     return df
+
+
+#Function to allow the user to view raw data
+def raw_data(df):
+    view_data = input("Would you like to view 5 rows of individual trip data? Enter yes or no?")
+    start_loc = 0
+    while view_data == 'yes':
+        print(df.iloc[start_loc:start_loc + 5])
+        start_loc += 5
+        view_display = input("Do you wish to see five more rows?: ").lower()
+        if view_display != 'yes':
+            break
 
 
 def time_stats(df):
@@ -142,28 +154,36 @@ def user_stats(df):
 
 
     # TO DO: Display counts of gender
-    count_gender = df['Gender'].value_counts()
-    # print('The gender stats are:\n{}'.format(count_gender))
-    # print('\nCalculating User Stats...\n')
-    print("male:")
-    print(count_gender.loc['Male'])
-    print("female:")
-    print(count_gender.loc['Female'])
+    try:
+        count_gender = df['Gender'].value_counts()
+        # print('The gender stats are:\n{}'.format(count_gender))
+        # print('\nCalculating User Stats...\n')
+        print("male:")
+        print(count_gender.loc['Male'])
+        print("female:")
+        print(count_gender.loc['Female'])
+    except KeyError:
+        print('Gender stats cannot be calculated because Gender does not appear in the dataframe')
+
 
 
 
     # TO DO: Display earliest, most recent, and most common year of birth
-    oldest_year = df['Birth Year'].min()
-    print("The oldest rider was born in ", oldest_year)
+    try:
+        oldest_year = df['Birth Year'].min()
+        print("The oldest rider was born in ", oldest_year)
 
-    youngest_year = df['Birth Year'].max()
-    print("The youngest rider was born in ", youngest_year)
+        youngest_year = df['Birth Year'].max()
+        print("The youngest rider was born in ", youngest_year)
 
-    mode_year = df['Birth Year'].mode()[0]
-    print("Most riders were born in ", mode_year)
+        mode_year = df['Birth Year'].mode()[0]
+        print("Most riders were born in ", mode_year)
 
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
+        print("\nThis took %s seconds." % (time.time() - start_time))
+    except KeyError:
+        print("Data for rider birth year is not available for this city.")
+
     print('-'*40)
 
 
@@ -174,6 +194,7 @@ def main():
         df = load_data(city, month, day)
         print(city, month, day)
         print(df.head(3))
+        raw_data(df)
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
